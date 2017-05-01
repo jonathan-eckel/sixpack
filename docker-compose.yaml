@@ -1,0 +1,28 @@
+version: "2"
+services:
+  sixpackapi:
+    build: .
+    command: "-w 8 sixpack.server:start"
+    environment:
+      - SIXPACK_CONFIG_ENABLED=true
+      - SIXPACK_CONFIG_REDIS_PORT=6379
+      - SIXPACK_CONFIG_REDIS_HOST=redis
+      - SIXPACK_CONFIG_REDIS_PREFIX=sixpack
+    links:
+    - redis
+    ports:
+    - "5000:5000"
+  sixpackweb:
+    build: .
+    command: "-w 2 sixpack.web:start"
+    environment:
+      - SIXPACK_CONFIG_ENABLED=true
+      - SIXPACK_CONFIG_REDIS_PORT=6379
+      - SIXPACK_CONFIG_REDIS_HOST=redis
+      - SIXPACK_CONFIG_REDIS_PREFIX=sixpack
+    links:
+    - redis
+    ports:
+    - "5001:5000"
+  redis:
+    image: redis:3.2.6
